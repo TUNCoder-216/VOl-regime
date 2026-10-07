@@ -1,0 +1,50 @@
+# Local runtime: images come from Docker Hub, the model comes from DagsHub MLflow.
+name: vol-regime
+
+services:
+  model-fetcher:
+    image: ${DOCKERHUB_USERNAME}/vol-api:${IMAGE_TAG:-latest}
+    command: ["python", "-m", "api.fetch_model"]
+    environment:
+      MLFLOW_TRACKING_URI: ${MLFLOW_TRACKING_URI}
+      MLFLOW_TRACKING_USERNAME: ${MLFLOW_TRACKING_USERNAME}
+      MLFLOW_TRACKING_PASSWORD: ${MLFLOW_TRACKING_PASSWORD}
+      MODEL_NAME: ${MODEL_NAME:-vol-regime}
+      MODEL_ALIAS: ${MODEL_ALIAS:-champion}
+      MODEL_DIR: /models
+    volumes:
+      - models:/models
+    restart: "no"
+
+  api:
+    image: ${DOCKERHUB_USERNAME}/vol-api:${IMAGE_TAG:-latest}
+    environment:
+      MODEL_DIR: /models
+    volumes:
+      - models:/models
+    ports:
+      - "8000:8000"
+    depends_on:
+      model-fetcher:
+        condition: service_completed_successfully
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    restart: unless-stopped
+
+  ui:
+    image: ${DOCKERHUB_USERNAME}/vol-ui:${IMAGE_TAG:-latest}
+    environment:
+      API_URL: http://api:8000
+    ports:
+      - "8501:8501"
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  models:

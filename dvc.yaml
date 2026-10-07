@@ -1,0 +1,34 @@
+stages:
+  download:
+    cmd: python -m vol_regime.data
+    deps:
+      - src/vol_regime/data.py
+    params:
+      - data
+    outs:
+      - data/raw/market.csv
+
+  features:
+    cmd: python -m vol_regime.features
+    deps:
+      - src/vol_regime/features.py
+      - data/raw/market.csv
+    params:
+      - features
+    outs:
+      - data/processed/dataset.csv
+
+  train:
+    cmd: python -m vol_regime.train
+    deps:
+      - src/vol_regime/train.py
+      - src/vol_regime/modeling.py
+      - data/processed/dataset.csv
+    params:
+      - features
+      - split
+      - train
+      - registry
+    metrics:
+      - reports/metrics.json:
+          cache: false

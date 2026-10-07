@@ -1,0 +1,16 @@
+.git
+.github
+.dvc
+data
+reports
+tests
+deploy
+mlruns
+.venv
+venv
+**/__pycache__
+**/*.pyc
+.pytest_cache
+.ruff_cache
+.env
+*.md

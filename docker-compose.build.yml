@@ -1,0 +1,9 @@
+# Dev override: build images locally instead of pulling them.
+# docker compose -f docker-compose.yml -f docker-compose.build.yml up --build
+services:
+  model-fetcher:
+    build: { context: ., dockerfile: docker/api.Dockerfile }
+  api:
+    build: { context: ., dockerfile: docker/api.Dockerfile }
+  ui:
+    build: { context: ., dockerfile: docker/ui.Dockerfile }
