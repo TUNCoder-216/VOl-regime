@@ -1,0 +1,21 @@
+schema: '2.0'
+stages:
+  download:
+    cmd: python -m vol_regime.data
+    deps:
+    - path: src/vol_regime/data.py
+      hash: md5
+      md5: 5993e2f4d629480427cd20546c86ce51
+      size: 3045
+    params:
+      params.yaml:
+        data:
+          start_date: '2005-01-01'
+          end_date: '2025-01-01'
+          index_ticker: ^GSPC
+          vix_ticker: ^VIX
+    outs:
+    - path: data/raw/market.csv
+      hash: md5
+      md5: 531cf208b0e83a19932aa32ee61f199f
+      size: 551431
