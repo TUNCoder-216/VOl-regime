@@ -1,6 +1,6 @@
-data:
+﻿data:
   start_date: "2005-01-01"
-  end_date: "2025-01-01"        # data v1 (exclusive). Data v2: "2026-10-01"
+  end_date: "2026-10-01"        # data v2 (exclusive). Data v1 was "2025-01-01"
   index_ticker: "^GSPC"
   vix_ticker: "^VIX"
 

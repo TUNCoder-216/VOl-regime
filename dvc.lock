@@ -11,21 +11,21 @@ stages:
       params.yaml:
         data:
           start_date: '2005-01-01'
-          end_date: '2025-01-01'
+          end_date: '2026-10-01'
           index_ticker: ^GSPC
           vix_ticker: ^VIX
     outs:
     - path: data/raw/market.csv
       hash: md5
-      md5: 531cf208b0e83a19932aa32ee61f199f
-      size: 551431
+      md5: 1a42da94760886afc0e55e359e8ff6f0
+      size: 596922
   features:
     cmd: python -m vol_regime.features
     deps:
     - path: data/raw/market.csv
       hash: md5
-      md5: 531cf208b0e83a19932aa32ee61f199f
-      size: 551431
+      md5: 1a42da94760886afc0e55e359e8ff6f0
+      size: 596922
     - path: src/vol_regime/features.py
       hash: md5
       md5: a56935fa68a2f996e5a6a7033f59465a
@@ -39,15 +39,15 @@ stages:
     outs:
     - path: data/processed/dataset.csv
       hash: md5
-      md5: deadf6178551137ad933148308832846
-      size: 1641851
+      md5: b96be0da3aeed92e48fa11b5341e5999
+      size: 1788206
   train:
     cmd: python -m vol_regime.train
     deps:
     - path: data/processed/dataset.csv
       hash: md5
-      md5: deadf6178551137ad933148308832846
-      size: 1641851
+      md5: b96be0da3aeed92e48fa11b5341e5999
+      size: 1788206
     - path: src/vol_regime/modeling.py
       hash: md5
       md5: 2d8d1de5339a75bf15aa53d625375cae
@@ -86,5 +86,5 @@ stages:
     outs:
     - path: reports/metrics.json
       hash: md5
-      md5: 5cb5714cda5a53bd1da8fd00d504ebcb
+      md5: d6a001097630e552e97401c884a9fb7f
       size: 281
