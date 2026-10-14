@@ -19,3 +19,72 @@ stages:
       hash: md5
       md5: 531cf208b0e83a19932aa32ee61f199f
       size: 551431
+  features:
+    cmd: python -m vol_regime.features
+    deps:
+    - path: data/raw/market.csv
+      hash: md5
+      md5: 531cf208b0e83a19932aa32ee61f199f
+      size: 551431
+    - path: src/vol_regime/features.py
+      hash: md5
+      md5: a56935fa68a2f996e5a6a7033f59465a
+      size: 3692
+    params:
+      params.yaml:
+        features:
+          horizon: 5
+          threshold_window: 252
+          threshold_quantile: 0.75
+    outs:
+    - path: data/processed/dataset.csv
+      hash: md5
+      md5: deadf6178551137ad933148308832846
+      size: 1641851
+  train:
+    cmd: python -m vol_regime.train
+    deps:
+    - path: data/processed/dataset.csv
+      hash: md5
+      md5: deadf6178551137ad933148308832846
+      size: 1641851
+    - path: src/vol_regime/modeling.py
+      hash: md5
+      md5: 2d8d1de5339a75bf15aa53d625375cae
+      size: 3391
+    - path: src/vol_regime/train.py
+      hash: md5
+      md5: 419d2c115548bf60158e77254f72e607
+      size: 4308
+    params:
+      params.yaml:
+        features:
+          horizon: 5
+          threshold_window: 252
+          threshold_quantile: 0.75
+        registry:
+          experiment: vol-regime
+          model_name: vol-regime
+          alias: champion
+          selection_metric: roc_auc
+          reference_rows: 400
+          quality_gate:
+            metric: roc_auc
+            min_value: 0.6
+        split:
+          test_size: 0.2
+        train:
+          random_state: 42
+          decision_threshold: 0.5
+          logreg:
+            C: 0.5
+          hgb:
+            max_iter: 300
+            learning_rate: 0.05
+            max_depth: 4
+            l2_regularization: 1.0
+    outs:
+    - path: reports/metrics.json
+      hash: md5
+      md5: 5cb5714cda5a53bd1da8fd00d504ebcb
+      size: 281

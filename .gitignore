@@ -9,3 +9,6 @@ __pycache__/
 mlruns/
 reports/reference_window.csv
 deploy/deploy.log
+models/
+*.egg-info/
+HANDOFF_PROGRESS.md
